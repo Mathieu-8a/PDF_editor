@@ -18,9 +18,17 @@ class PDFEditor:
         self.main_frame = ttk.Frame(self.window, padding="10")
         self.main_frame.pack(fill=tk.BOTH, expand=True)
         
+        # Create button frame
+        button_frame = ttk.Frame(self.main_frame)
+        button_frame.pack(pady=5)
+        
         # Create buttons
-        self.select_button = ttk.Button(self.main_frame, text="Select PDF", command=self.select_pdf_file)
-        self.select_button.pack(pady=5)
+        self.select_button = ttk.Button(button_frame, text="Select PDF", command=self.select_pdf_file)
+        self.select_button.pack(side=tk.LEFT, padx=5)
+        
+        # Save button
+        self.save_button = ttk.Button(button_frame, text="Save", command=self.save_pdf)
+        self.save_button.pack(side=tk.LEFT, padx=5)
         
         # Create split view
         self.paned_window = ttk.PanedWindow(self.main_frame, orient=tk.HORIZONTAL)
@@ -48,10 +56,6 @@ class PDFEditor:
         btn_frame.pack(pady=5)
         ttk.Button(btn_frame, text="↑", command=self.move_up).pack(side=tk.LEFT, padx=5)
         ttk.Button(btn_frame, text="↓", command=self.move_down).pack(side=tk.LEFT, padx=5)
-        
-        # Save button
-        self.save_button = ttk.Button(self.main_frame, text="Save", command=self.save_pdf)
-        self.save_button.pack(pady=5)
         
     def select_pdf_file(self):
         self.pdf_path = filedialog.askopenfilename(
