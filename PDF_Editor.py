@@ -81,12 +81,26 @@ class PDFEditor:
         doc = fitz.open(self.pdf_path)
         page = doc[page_idx]
         
-        # Render page to image
-        pix = page.get_pixmap(matrix=fitz.Matrix(0.5, 0.5))  # 0.5 = 50% of original size
+        # Get frame size
+        frame_width = self.right_frame.winfo_width()
+        frame_height = self.right_frame.winfo_height()
+        
+        # Get page size
+        page_rect = page.rect
+        page_width = page_rect.width
+        page_height = page_rect.height
+        
+        # Calculate scaling factor to fit the frame while maintaining aspect ratio
+        width_ratio = frame_width / page_width
+        height_ratio = frame_height / page_height
+        scale = min(width_ratio, height_ratio) * 0.9  # 90% of frame size for padding
+        
+        # Render page to image with calculated scale
+        pix = page.get_pixmap(matrix=fitz.Matrix(scale, scale))
         img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
         
         # Convert to PhotoImage and store as instance variable
-        self._photo = ImageTk.PhotoImage(img)  # Store as instance variable
+        self._photo = ImageTk.PhotoImage(img)
         self.preview_label.configure(image=self._photo)
         
         doc.close()
