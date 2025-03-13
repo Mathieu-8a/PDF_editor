@@ -18,16 +18,22 @@ class PDFEditor:
         self.main_frame = ttk.Frame(self.window, padding="10")
         self.main_frame.pack(fill=tk.BOTH, expand=True)
         
-        # Create button frame
-        button_frame = ttk.Frame(self.main_frame)
-        button_frame.pack(pady=5)
+        # Create top button container
+        top_container = ttk.Frame(self.main_frame)
+        top_container.pack(pady=5, fill=tk.X)
         
-        # Create buttons
-        self.select_button = ttk.Button(button_frame, text="Select PDF", command=self.select_pdf_file)
+        # Left frame for movement buttons
+        move_frame = ttk.Frame(top_container)
+        move_frame.pack(side=tk.LEFT, padx=10)
+        ttk.Button(move_frame, text="↑", command=self.move_up).pack(side=tk.LEFT, padx=2)
+        ttk.Button(move_frame, text="↓", command=self.move_down).pack(side=tk.LEFT, padx=2)
+        
+        # Center frame for Select and Save buttons
+        center_frame = ttk.Frame(top_container)
+        center_frame.pack(expand=True)
+        self.select_button = ttk.Button(center_frame, text="Select PDF", command=self.select_pdf_file)
         self.select_button.pack(side=tk.LEFT, padx=5)
-        
-        # Save button
-        self.save_button = ttk.Button(button_frame, text="Save", command=self.save_pdf)
+        self.save_button = ttk.Button(center_frame, text="Save", command=self.save_pdf)
         self.save_button.pack(side=tk.LEFT, padx=5)
         
         # Create split view
