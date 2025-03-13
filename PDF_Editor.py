@@ -59,6 +59,28 @@ class PDFEditor:
         self.preview_label = ttk.Label(self.right_frame)
         self.preview_label.pack(fill=tk.BOTH, expand=True)
         
+        # Center Select PDF button for empty state
+        self.center_select_button = ttk.Button(self.right_frame, text="Select PDF", command=self.select_pdf_file)
+        self.center_select_button.configure(style='Large.TButton')
+        self.center_select_button.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        
+        # Create custom style for large button
+        style = ttk.Style()
+        style.configure('Large.TButton', font=('TkDefaultFont', 14, 'bold'), padding=(20, 10))
+
+    def load_pdf_pages(self):
+        if self.pdf_path is None:
+            return
+            
+        # Hide center select button when PDF is loaded
+        self.center_select_button.place_forget()
+        
+        reader = PdfReader(self.pdf_path)
+        self.pages = list(range(len(reader.pages)))
+        self.update_listbox()
+        if self.pages:  # Show first page preview
+            self.show_preview(0)
+    
     def select_pdf_file(self):
         self.pdf_path = filedialog.askopenfilename(
             title="Select PDF file",
@@ -105,16 +127,6 @@ class PDFEditor:
         self.preview_label.configure(image=self._photo)
         
         doc.close()
-
-    def load_pdf_pages(self):
-        if self.pdf_path is None:
-            return
-            
-        reader = PdfReader(self.pdf_path)
-        self.pages = list(range(len(reader.pages)))
-        self.update_listbox()
-        if self.pages:  # Show first page preview
-            self.show_preview(0)
     
     def update_listbox(self):
         self.pages_listbox.delete(0, tk.END)
