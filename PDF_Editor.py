@@ -27,6 +27,7 @@ class PDFEditor:
         move_frame.pack(side=tk.LEFT, padx=10)
         ttk.Button(move_frame, text="↑", command=self.move_up).pack(side=tk.LEFT, padx=2)
         ttk.Button(move_frame, text="↓", command=self.move_down).pack(side=tk.LEFT, padx=2)
+        ttk.Button(move_frame, text="Delete", command=self.delete_page).pack(side=tk.LEFT, padx=2)
         
         # Center frame for Select and Save buttons
         center_frame = ttk.Frame(top_container)
@@ -137,6 +138,24 @@ class PDFEditor:
                 self.pages[current_idx+1], self.pages[current_idx]
             self.update_listbox()
             self.pages_listbox.selection_set(current_idx+1)
+    
+    def delete_page(self):
+        idx = self.pages_listbox.curselection()
+        if not idx:
+            return
+            
+        current_idx = idx[0]
+        del self.pages[current_idx]
+        self.update_listbox()
+        
+        # Select the next page or the last page if we deleted the last one
+        if self.pages:
+            if current_idx >= len(self.pages):
+                self.pages_listbox.selection_set(len(self.pages)-1)
+                self.show_preview(self.pages[len(self.pages)-1])
+            else:
+                self.pages_listbox.selection_set(current_idx)
+                self.show_preview(self.pages[current_idx])
     
     def save_pdf(self):
         if not self.pdf_path:
