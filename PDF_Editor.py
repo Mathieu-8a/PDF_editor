@@ -41,7 +41,8 @@ class PDFEditor:
         self.paned_window.pack(fill=tk.BOTH, expand=True)
         
         # Left frame for list
-        self.left_frame = ttk.Frame(self.paned_window)
+        self.left_frame = ttk.Frame(self.paned_window, width=200)  # Increased width
+        self.left_frame.pack_propagate(False)  # Prevent frame from shrinking
         self.paned_window.add(self.left_frame)
         
         # Create listbox for pages
@@ -56,12 +57,6 @@ class PDFEditor:
         # Preview label
         self.preview_label = ttk.Label(self.right_frame)
         self.preview_label.pack(fill=tk.BOTH, expand=True)
-        
-        # Create movement buttons
-        btn_frame = ttk.Frame(self.main_frame)
-        btn_frame.pack(pady=5)
-        ttk.Button(btn_frame, text="↑", command=self.move_up).pack(side=tk.LEFT, padx=5)
-        ttk.Button(btn_frame, text="↓", command=self.move_down).pack(side=tk.LEFT, padx=5)
         
     def select_pdf_file(self):
         self.pdf_path = filedialog.askopenfilename(
