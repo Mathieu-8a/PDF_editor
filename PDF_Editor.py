@@ -4,6 +4,7 @@ from PyPDF2 import PdfReader, PdfWriter
 import os
 import fitz
 from PIL import Image, ImageTk
+from tkinter import messagebox
 
 class PDFEditor:
     def __init__(self):
@@ -77,16 +78,18 @@ class PDFEditor:
         
         # Render page to image
         pix = page.get_pixmap(matrix=fitz.Matrix(0.5, 0.5))  # 0.5 = 50% of original size
-        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
         
-        # Convert to PhotoImage
-        photo = ImageTk.PhotoImage(img)
-        self.preview_label.configure(image=photo)
-        self.preview_label.image = photo  # Keep a reference
+        # Convert to PhotoImage and store as instance variable
+        self._photo = ImageTk.PhotoImage(img)  # Store as instance variable
+        self.preview_label.configure(image=self._photo)
         
         doc.close()
 
     def load_pdf_pages(self):
+        if self.pdf_path is None:
+            return
+            
         reader = PdfReader(self.pdf_path)
         self.pages = list(range(len(reader.pages)))
         self.update_listbox()
@@ -137,12 +140,18 @@ class PDFEditor:
         with open(new_path, 'wb') as output_file:
             writer.write(output_file)
             
-        tk.messagebox.showinfo("Success", f"PDF saved as: {new_path}")
-    
-    def run(self):
-        self.window.mainloop()
+        try:
+            if new_path:
+                messagebox.showinfo("Success", f"PDF saved as: {new_path}")
+            else:
+                messagebox.showerror("Error", "Failed to save PDF: Output path not defined")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save PDF: {str(e)}")
+
+def run(self):
+    self.window.mainloop()
 
 if __name__ == "__main__":
     app = PDFEditor()
-    app.run()
+    app.window.mainloop()
 
