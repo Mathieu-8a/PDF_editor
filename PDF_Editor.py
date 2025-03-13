@@ -2,12 +2,14 @@ from tkinter import filedialog, ttk
 import tkinter as tk
 from PyPDF2 import PdfReader, PdfWriter
 import os
+import fitz
+from PIL import Image, ImageTk
 
 class PDFEditor:
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("PDF Editor")
-        self.window.geometry("400x500")
+        self.window.geometry("800x500")  # Increased width for preview
         self.pdf_path = None
         self.pages = []
         
@@ -19,9 +21,26 @@ class PDFEditor:
         self.select_button = ttk.Button(self.main_frame, text="Select PDF", command=self.select_pdf_file)
         self.select_button.pack(pady=5)
         
+        # Create split view
+        self.paned_window = ttk.PanedWindow(self.main_frame, orient=tk.HORIZONTAL)
+        self.paned_window.pack(fill=tk.BOTH, expand=True)
+        
+        # Left frame for list
+        self.left_frame = ttk.Frame(self.paned_window)
+        self.paned_window.add(self.left_frame)
+        
         # Create listbox for pages
-        self.pages_listbox = tk.Listbox(self.main_frame, selectmode=tk.SINGLE)
+        self.pages_listbox = tk.Listbox(self.left_frame, selectmode=tk.SINGLE)
         self.pages_listbox.pack(fill=tk.BOTH, expand=True, pady=5)
+        self.pages_listbox.bind('<<ListboxSelect>>', self.on_page_select)
+        
+        # Right frame for preview
+        self.right_frame = ttk.Frame(self.paned_window)
+        self.paned_window.add(self.right_frame)
+        
+        # Preview label
+        self.preview_label = ttk.Label(self.right_frame)
+        self.preview_label.pack(fill=tk.BOTH, expand=True)
         
         # Create movement buttons
         btn_frame = ttk.Frame(self.main_frame)
@@ -41,10 +60,38 @@ class PDFEditor:
         if self.pdf_path:
             self.load_pdf_pages()
     
+    def on_page_select(self, event):
+        if not self.pdf_path:
+            return
+        
+        selection = self.pages_listbox.curselection()
+        if not selection:
+            return
+            
+        page_idx = self.pages[selection[0]]
+        self.show_preview(page_idx)
+    
+    def show_preview(self, page_idx):
+        doc = fitz.open(self.pdf_path)
+        page = doc[page_idx]
+        
+        # Render page to image
+        pix = page.get_pixmap(matrix=fitz.Matrix(0.5, 0.5))  # 0.5 = 50% of original size
+        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+        
+        # Convert to PhotoImage
+        photo = ImageTk.PhotoImage(img)
+        self.preview_label.configure(image=photo)
+        self.preview_label.image = photo  # Keep a reference
+        
+        doc.close()
+
     def load_pdf_pages(self):
         reader = PdfReader(self.pdf_path)
         self.pages = list(range(len(reader.pages)))
         self.update_listbox()
+        if self.pages:  # Show first page preview
+            self.show_preview(0)
     
     def update_listbox(self):
         self.pages_listbox.delete(0, tk.END)
