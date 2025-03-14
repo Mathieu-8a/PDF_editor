@@ -173,6 +173,7 @@ class PDFEditor:
     
     def save_pdf(self):
         if not self.pdf_path:
+            messagebox.showwarning("Warning", "Ouvrez un PDF d'abord")
             return
             
         # Create new filename
@@ -194,14 +195,15 @@ class PDFEditor:
             
         try:
             if new_path:
-                messagebox.showinfo("Success", f"PDF saved as: {new_path}")
+                messagebox.showinfo("Success", f"PDF enregistré sous :{new_path}")
             else:
-                messagebox.showerror("Error", "Failed to save PDF: Output path not defined")
+                messagebox.showerror("Error", "Échec de l'enregistrement du PDF : Chemin de sortie non défini")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save PDF: {str(e)}")
 
     def save_as_pdf(self):
         if not self.pdf_path:
+            messagebox.showwarning("Warning", "Ouvrez un PDF d'abord")
             return
             
         # Open save file dialog
