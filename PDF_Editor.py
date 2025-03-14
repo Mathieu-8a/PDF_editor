@@ -11,6 +11,10 @@ class PDFEditor:
         self.window = tk.Tk()
         self.window.title("PDF Editor")
         self.window.geometry("800x500")  # Increased width for preview
+        
+        # Center window on screen
+        self.center_window()
+        
         self.pdf_path = None
         self.pages = []
         
@@ -230,6 +234,18 @@ class PDFEditor:
                 messagebox.showinfo("Success", f"PDF saved as: {new_path}")
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to save PDF: {str(e)}")
+
+    def center_window(self):
+        # Get screen dimensions
+        screen_width = self.window.winfo_screenwidth()
+        screen_height = self.window.winfo_screenheight()
+        
+        # Calculate position coordinates
+        x = (screen_width - 800) // 2
+        y = (screen_height - 500) // 2
+        
+        # Set window position
+        self.window.geometry(f"800x500+{x}+{y}")
 
 def run(self):
     self.window.mainloop()
