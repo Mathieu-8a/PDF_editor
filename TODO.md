@@ -8,12 +8,18 @@
     - [ ] Valider l'affichage des aperçus PDF
     - [ ] Vérifier la gestion des erreurs
 - [ ] Création de l'exécutable
-    - [ ] Ajouter une icône pour l'application
+    - [x] Ajouter une icône pour l'application
+    - [x] Résoudre l'erreur d'ordinal 380
     - [ ] Tester l'exécutable sur différentes versions de Windows
-    - [ ] Vérifier que toutes les dépendances sont incluses
+        - [x] Test sur Window 11
+        - [ ] Test sur Window 10
+    - [x] Vérifier que toutes les dépendances sont incluses
+    - [x] Ajouter un numéro de version à l'exécutable
+
+## Bug Fixes
+- [x] Corriger l'erreur de DLL manquante dans l'exécutable
 
 ## Planned Features
 
-## Bug Fixes
-
 ## Improvements
+- [ ] Système de mise à jour automatique

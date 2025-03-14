@@ -3,16 +3,12 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QPushButton,
                            QFileDialog, QMessageBox, QSplitter)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QImage
-from PyPDF2 import PdfReader, PdfWriter
-import os
-import fitz
-import sys
-from PIL import Image
+from version import VERSION
 
 class PDFEditor(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("PDF Editor")
+        self.setWindowTitle(f"PDF Editor v{VERSION}")
         self.setGeometry(100, 100, 800, 500)
         self.pdf_path = None
         self.pages = []

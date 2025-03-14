@@ -5,11 +5,12 @@ import os
 import fitz
 from PIL import Image, ImageTk
 from tkinter import messagebox
-
+from version import VERSION
+        
 class PDFEditor:
     def __init__(self):
         self.window = tk.Tk()
-        self.window.title("PDF Editor")
+        self.window.title(f"PDF Editor v{VERSION}")
         self.window.geometry("800x500")  # Increased width for preview
         
         # Center window on screen
