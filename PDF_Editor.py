@@ -36,6 +36,8 @@ class PDFEditor:
         self.select_button.pack(side=tk.LEFT, padx=5)
         self.save_button = ttk.Button(center_frame, text="Save", command=self.save_pdf)
         self.save_button.pack(side=tk.LEFT, padx=5)
+        self.save_as_button = ttk.Button(center_frame, text="Save As", command=self.save_as_pdf)
+        self.save_as_button.pack(side=tk.LEFT, padx=5)
         
         # Create split view
         self.paned_window = ttk.PanedWindow(self.main_frame, orient=tk.HORIZONTAL)
@@ -197,6 +199,35 @@ class PDFEditor:
                 messagebox.showerror("Error", "Failed to save PDF: Output path not defined")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to save PDF: {str(e)}")
+
+    def save_as_pdf(self):
+        if not self.pdf_path:
+            return
+            
+        # Open save file dialog
+        new_path = filedialog.asksaveasfilename(
+            defaultextension=".pdf",
+            initialfile=os.path.basename(self.pdf_path),
+            initialdir=os.path.dirname(self.pdf_path),
+            title="Save PDF As",
+            filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")]
+        )
+        
+        if new_path:
+            # Create new PDF with reordered pages
+            reader = PdfReader(self.pdf_path)
+            writer = PdfWriter()
+            
+            for page_num in self.pages:
+                writer.add_page(reader.pages[page_num])
+                
+            # Save the new PDF
+            try:
+                with open(new_path, 'wb') as output_file:
+                    writer.write(output_file)
+                messagebox.showinfo("Success", f"PDF saved as: {new_path}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to save PDF: {str(e)}")
 
 def run(self):
     self.window.mainloop()
