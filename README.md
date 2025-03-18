@@ -29,6 +29,7 @@ No additional installation required.
 5. Save your changes using either:
    - "Save" to create a new file with "_modified" suffix
    - "Save As" to choose a custom location and name
+6. Use the "Get Text" button to extract text from the PDF
 
 ## System Requirements
 
