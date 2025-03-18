@@ -6,7 +6,7 @@ import fitz
 from PIL import Image, ImageTk
 from tkinter import messagebox
 from version import VERSION
-        
+
 class PDFEditor:
     def __init__(self):
         self.window = tk.Tk()
@@ -43,7 +43,9 @@ class PDFEditor:
         self.save_button.pack(side=tk.LEFT, padx=5)
         self.save_as_button = ttk.Button(center_frame, text="Save As", command=self.save_as_pdf)
         self.save_as_button.pack(side=tk.LEFT, padx=5)
-        
+        self.get_text_button = ttk.Button(center_frame, text="Get Text", command=self.extract_text)
+        self.get_text_button.pack(side=tk.LEFT, padx=5)
+
         # Create split view
         self.paned_window = ttk.PanedWindow(self.main_frame, orient=tk.HORIZONTAL)
         self.paned_window.pack(fill=tk.BOTH, expand=True)
@@ -248,10 +250,51 @@ class PDFEditor:
         # Set window position
         self.window.geometry(f"800x500+{x}+{y}")
 
+
+    def extract_text(self):
+        if not self.pdf_path:
+            messagebox.showwarning("Warning", "Please open a PDF first")
+            return
+            
+        try:
+            doc = fitz.open(self.pdf_path)
+            text = ""
+            for page_num in self.pages:
+                page = doc[page_num]
+                text += f"\n=== Page {page_num + 1} ===\n"
+                text += page.get_text()
+            doc.close()
+            
+            # Create a new window to display the text
+            text_window = tk.Toplevel(self.window)
+            text_window.title("Extracted Text")
+            text_window.geometry("600x400")
+            
+            # Add text widget with scrollbar
+            text_frame = ttk.Frame(text_window)
+            text_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+            
+            scrollbar = ttk.Scrollbar(text_frame)
+            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+            
+            text_widget = tk.Text(text_frame, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+            text_widget.pack(fill=tk.BOTH, expand=True)
+            text_widget.insert(tk.END, text)
+            
+            scrollbar.config(command=text_widget.yview)
+            
+            # Add copy button
+            copy_button = ttk.Button(text_window, text="Copy to Clipboard", 
+                                   command=lambda: self.window.clipboard_append(text_widget.get("1.0", tk.END)))
+            copy_button.pack(pady=5)
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to extract text: {str(e)}")
+
 def run(self):
     self.window.mainloop()
 
 if __name__ == "__main__":
     app = PDFEditor()
     app.window.mainloop()
-
+    
