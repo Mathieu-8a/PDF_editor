@@ -1,7 +1,7 @@
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=(1, 0, 0, 0),
-    prodvers=(1, 0, 0, 0),
+    filevers=(1, 1, 1, 0),
+    prodvers=(1, 1, 1, 0),
     mask=0x3f,
     flags=0x0,
     OS=0x40004,
@@ -13,14 +13,14 @@ VSVersionInfo(
     StringFileInfo([
       StringTable(
         u'040904B0',
-        [StringStruct(u'CompanyName', u''),
-         StringStruct(u'FileDescription', u'PDF Editor'),
-         StringStruct(u'FileVersion', u'1.0.0'),
-         StringStruct(u'InternalName', u'PDF_Editor'),
-         StringStruct(u'LegalCopyright', u''),
+        [StringStruct(u'CompanyName', u'My Company'),
+         StringStruct(u'FileDescription', u'PDF Editor Application'),
+         StringStruct(u'FileVersion', u'1.1.1'),
+         StringStruct(u'InternalName', u'pdf_editor'),
+         StringStruct(u'LegalCopyright', u'Copyright (c) 2024'),
          StringStruct(u'OriginalFilename', u'PDF_Editor.exe'),
          StringStruct(u'ProductName', u'PDF Editor'),
-         StringStruct(u'ProductVersion', u'1.0.0')])
+         StringStruct(u'ProductVersion', u'1.1.1')])
     ]),
     VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
   ]

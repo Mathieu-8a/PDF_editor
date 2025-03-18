@@ -2,8 +2,8 @@
 
 A simple and efficient PDF editor that allows you to reorganize, delete, and save PDF pages.
 
-> ⚠️ **Note:** The Qt version (PDF_Editor_Qt.py) is currently under development. 
-> Please use the stable version (PDF_Editor.py) for now.
+> ⚠️ **Note:** Please use the stable version (PDF_Editor.py) for now.
+> The Qt version (PDF_Editor_Qt.py) is currently under development. 
 
 ## Features
 

@@ -1,11 +1,7 @@
 # TODO List
 
 ## In Progress
-- [ ] Création de l'exécutable
-- [x] Extraction de texte
-    - [x] Ajouter un bouton "Get Text"
-    - [x] Implémenter la fonction d'extraction de texte
-    - [x] Copie du texte extrait dans le presse papier
+
 
 ## Bug Fixes
 - [x] Corriger l'erreur de DLL manquante dans l'exécutable
@@ -22,6 +18,15 @@
 ## Improvements
 - [ ] Système de mise à jour automatique
 
+## Version 1.1.1
+- [x] Extraction de texte
+    - [x] Ajouter un bouton "Get Text"
+    - [x] Implémenter la fonction d'extraction de texte
+    - [x] Copie du texte extrait dans le presse papier
+- [x] Mise à jour du numéro de version
+    - [x] Update version_info pour éviter d'être detecté comme dangereux
+- [x] Création de l'exécutable
+    - [x] instruction : pyinstaller --onefile --windowed --icon=icon.ico --name="PDF_Editor_v1.1.1" --version-file=version_info.txt e:\Github\PDF_editor\PDF_Editor.py
 
 ## Version 1.0.0
 - [x] Création de l'exécutable
