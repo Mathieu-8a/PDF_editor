@@ -8,12 +8,27 @@ from tkinter import messagebox
 from version import VERSION
 
 class PDFEditor:
+    def center_window(self, window=None, width=800, height=500):
+        # Get screen dimensions
+        screen_width = self.window.winfo_screenwidth()
+        screen_height = self.window.winfo_screenheight()
+        
+        # If no window specified, use main window
+        if window is None:
+            window = self.window
+        
+        # Calculate position coordinates
+        x = (screen_width - width) // 2
+        y = (screen_height - height) // 2
+        
+        # Set window position
+        window.geometry(f"{width}x{height}+{x}+{y}")
+
     def __init__(self):
         self.window = tk.Tk()
         self.window.title(f"PDF Editor v{VERSION}")
-        self.window.geometry("800x500")  # Increased width for preview
         
-        # Center window on screen
+        # Center main window
         self.center_window()
         
         self.pdf_path = None
@@ -238,19 +253,6 @@ class PDFEditor:
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to save PDF: {str(e)}")
 
-    def center_window(self):
-        # Get screen dimensions
-        screen_width = self.window.winfo_screenwidth()
-        screen_height = self.window.winfo_screenheight()
-        
-        # Calculate position coordinates
-        x = (screen_width - 800) // 2
-        y = (screen_height - 500) // 2
-        
-        # Set window position
-        self.window.geometry(f"800x500+{x}+{y}")
-
-
     def extract_text(self):
         if not self.pdf_path:
             messagebox.showwarning("Warning", "Please open a PDF first")
@@ -262,13 +264,17 @@ class PDFEditor:
             for page_num in self.pages:
                 page = doc[page_num]
                 text += f"\n=== Page {page_num + 1} ===\n"
-                text += page.get_text()
+                text += page.get_text("text")
             doc.close()
+            
+            # Copy text to clipboard automatically
+            self.window.clipboard_clear()
+            self.window.clipboard_append(text)
             
             # Create a new window to display the text
             text_window = tk.Toplevel(self.window)
             text_window.title("Extracted Text")
-            text_window.geometry("600x400")
+            self.center_window(text_window, width=600, height=400)
             
             # Add text widget with scrollbar
             text_frame = ttk.Frame(text_window)
@@ -282,11 +288,6 @@ class PDFEditor:
             text_widget.insert(tk.END, text)
             
             scrollbar.config(command=text_widget.yview)
-            
-            # Add copy button
-            copy_button = ttk.Button(text_window, text="Copy to Clipboard", 
-                                   command=lambda: self.window.clipboard_append(text_widget.get("1.0", tk.END)))
-            copy_button.pack(pady=5)
             
         except Exception as e:
             messagebox.showerror("Error", f"Failed to extract text: {str(e)}")
